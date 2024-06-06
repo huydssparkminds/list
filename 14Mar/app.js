@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
-
+require('dotenv').config();
 const mongoose = require('mongoose');
 // Kết nối đến MongoDB
 // const db = require('./config/db');
@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 // // Connet
 // db.connect();
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/noithat"
+const MONGO_URL = process.env.MONGO_URL;
 mongoose.connect(MONGO_URL).then(() => {
   console.log("Database is connet")
 })
