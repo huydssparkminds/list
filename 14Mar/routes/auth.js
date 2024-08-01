@@ -13,26 +13,43 @@ var sendEmail = require('../helper/sendEmail')
 router.post('/login', async function (req, res, next) {
   let username = req.body.username;
   let password = req.body.password;
-  console.log('username: ' + username ,password);
+  console.log('username: ' + username, password);
+  
+  // Kiểm tra xem username và password có tồn tại không
   if (!username || !password) {
-    ResHelper.ResponseSend(res, false, 404, 'username va password phai dien day du');
+    ResHelper.ResponseSend(res, false, 404, 'Username và password phải điền đầy đủ');
     return;
   }
+
+  // Tìm người dùng trong cơ sở dữ liệu
   let user = await userModel.findOne({ username: username });
   if (!user) {
-    ResHelper.ResponseSend(res, false, 404, 'username hoac password khong dung');
+    ResHelper.ResponseSend(res, false, 404, 'Username hoặc password không đúng');
     return;
   }
+
+  // So sánh mật khẩu
   var checkpass = bcrypt.compareSync(password, user.password);
   if (checkpass) {
+    // Tạo token
     const token = user.getJWT();
+    
+    // Thiết lập cookie với token
     res.cookie('token', token);
+    
+    // Tạo đối tượng chứa thông tin người dùng
+    const userInfo = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      // Thêm các thuộc tính khác nếu cần
+    };
 
-    ResHelper.ResponseSend(res, true, 200, token);
+    // Gửi phản hồi với thông tin người dùng và token
+    ResHelper.ResponseSend(res, true, 200, { token, user: userInfo });
   } else {
-    ResHelper.ResponseSend(res, false, 404, 'username hoac password khong dung');
+    ResHelper.ResponseSend(res, false, 404, 'Username hoặc password không đúng');
   }
-
 });
 router.post('/register', Validator.UserValidate(), async function (req, res, next) {
   var errors = validationResult(req).errors;
