@@ -3,7 +3,7 @@ var router = express.Router();
 const sanphamModel = require('../model/sanpham')
 var responseReturn = require('../helper/ResponseHandle')
 const CategoryModel = require("../model/category");
-
+const os = require('os');
 
 const multer  = require('multer');
 const upload = multer({ dest: os.tmpdir() });
