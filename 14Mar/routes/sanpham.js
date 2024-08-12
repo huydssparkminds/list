@@ -4,6 +4,11 @@ const sanphamModel = require('../model/sanpham')
 var responseReturn = require('../helper/ResponseHandle')
 const CategoryModel = require("../model/category");
 
+
+const multer  = require('multer');
+const upload = multer({ dest: os.tmpdir() });
+
+
 router.get('/', async function(req, res, next) {
   try {
     let limit = req.query.limit; // Lấy giá trị của tham số "limit" từ request query
@@ -132,5 +137,16 @@ router.delete("/:id", async function (req, res, next) {
     console.error(error);
     res.status(500).send("Server Error");
   }
+});
+
+
+router.post('/upload', upload.single('file'), function(req, res) {
+  const title = req.body.title;
+  const file = req.file;
+
+  console.log(title);
+  console.log(file);
+
+  res.sendStatus(200);
 });
 module.exports = router;
