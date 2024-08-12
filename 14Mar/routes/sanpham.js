@@ -147,6 +147,6 @@ router.post('/upload', upload.single('file'), function(req, res) {
   console.log(title);
   console.log(file);
 
-  res.sendStatus(200);
+  res.json({message:"OK"})
 });
 module.exports = router;
