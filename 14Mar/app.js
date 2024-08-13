@@ -23,7 +23,7 @@ const corsOptions = {
 
 }
 
-
+app.use(cors());
 
 var app = express();
 // Sử dụng middleware CORS
