@@ -27,7 +27,6 @@ var app = express();
 // Sử dụng middleware CORS
 app.use(cors(corsOptions));
 app.use(cors({ origin: 'http://localhost:5173' }));
-app.use(cors());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
