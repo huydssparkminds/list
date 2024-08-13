@@ -22,7 +22,7 @@ const corsOptions = {
   optionSuccessStatus:200,
 
 }
-
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(cors());
 
 var app = express();
