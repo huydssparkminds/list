@@ -25,7 +25,6 @@ const storage = new CloudinaryStorage({
 });
 
 
-
 const upload = multer({ storage: storage });
 
 router.get("/", async function (req, res, next) {
@@ -165,7 +164,7 @@ router.put("/:id", async function (req, res, next) {
 // Xóa dữ liệu
 router.delete("/:id", async function (req, res, next) {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
     const deletedProduct = await sanphamModel.findByIdAndDelete(id);
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
