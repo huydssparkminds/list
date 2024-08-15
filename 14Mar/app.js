@@ -30,6 +30,7 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.use(express.static('public'));
 
 app.use(logger('dev'));
 app.use(express.json());
