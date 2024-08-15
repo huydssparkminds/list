@@ -5,7 +5,25 @@ var responseReturn = require('../helper/ResponseHandle')
 const CategoryModel = require("../model/category");
 const os = require('os');
 
-const multer  = require('multer');
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: "dkjvpmjgm",  
+  api_key: "969431646287836",     
+  api_secret: "MPiu4DDf6VVHEHUKFRwR0F",
+});
+
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    allowed_formats: ["jpg", "jpeg", "png"],  
+    upload_preset: "xmgzdfau",  
+  },
+});
+
 const upload = multer({ dest: os.tmpdir() });
 
 
@@ -66,11 +84,10 @@ router.get("/:id", async function (req, res, next) {
     res.status(500).send("Server Error"); // Trả về lỗi 500 nếu có lỗi xảy ra
   }
 });
-// Thêm dữ liệu mới
-router.post("/add", async function (req, res, next) {
+router.post("/add", upload.single("imgFile"), async function (req, res, next) {
   try {
     // Lấy dữ liệu từ request body
-    const { title, description, price, linkImg, categoryName } = req.body;
+    const { title, description, price, categoryName } = req.body;
     
     // Tìm hoặc tạo mới danh mục từ tên được cung cấp
     let category = await CategoryModel.findOne({ name: categoryName });
@@ -79,6 +96,9 @@ router.post("/add", async function (req, res, next) {
       category = new CategoryModel({ name: categoryName });
       await category.save();
     }
+
+    // Lấy link ảnh từ Cloudinary sau khi upload thành công
+    const linkImg = req.file.path;  // Lấy URL ảnh từ req.file (sau khi upload lên Cloudinary)
 
     // Tạo một document mới từ model sản phẩm
     const newProduct = new sanphamModel({
@@ -91,6 +111,7 @@ router.post("/add", async function (req, res, next) {
 
     // Lưu document vào cơ sở dữ liệu
     const savedProduct = await newProduct.save();
+
     // Trả về kết quả
     res.status(201).json(savedProduct);
   } catch (error) {
