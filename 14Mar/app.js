@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 // // Connet
 // db.connect();
 
-const MONGO_URL = process.env.MONGO_URL;
+const MONGO_URL = 'mongodb+srv://songhuy3042002:9LPcD7maKgsX@project1.t9dsa.mongodb.net/DEMO_LIST?retryWrites=true&w=majority&appName=project1'
 mongoose.connect(MONGO_URL).then(() => {
   console.log("Database is connet")
 })
